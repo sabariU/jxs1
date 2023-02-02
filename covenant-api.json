@@ -1,0 +1,1575 @@
+openapi: 3.0.3
+info:
+  title: Covenant APIs
+  description: |-
+    Covenant handes Intra group billing for our organization. 
+    It offers crucial services for IGB such as billing computation, basis capture, notifications, invoice triggering, digital signatory and more. by ingrating with multiple stake holder systems through REST APIs.
+
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Covenant
+  url: http://swagger.io
+servers:
+  - url: https://io.covenant
+tags:
+  - name: sow
+    description: Everything about Sow (Statement of Work)
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+  - name: serviceitem
+    description: Everything about Service Item
+    externalDocs:
+      description: Find out more about Service Item
+      url: http://swagger.io
+  - name: party-to-agreement
+    description: Everything about Party-to-Agreement
+    externalDocs:
+      description: Find out more about Party-to-Agreement
+      url: http://swagger.io
+  - name: disa-digos
+    description: Everything about DISA/DIGOS
+    externalDocs:
+      description: Find out more about DISA/DIGOS
+      url: http://swagger.io
+  - name: compute
+    description: Everything about compute
+    externalDocs:
+      description: Find out more about compute
+      url: http://swagger.io
+  - name: data-ingestion
+    description: Everything about data and datasources
+    externalDocs:
+      description: Find out more about data and datasources
+      url: http://swagger.io
+  - name: static-input
+    description: Everything about static inputs
+    externalDocs:
+      description: Find out more about static inputs
+      url: http://swagger.io
+  - name: user
+    description: Everything about User
+    externalDocs:
+      description: Find out more User
+      url: http://swagger.io    
+paths:
+  /sows:
+    get:
+      tags:
+        - sow
+      summary: Get/Filter/Search all Sows
+      description: Returns all Sows
+      operationId: getAllSows
+      parameters:
+        - name: ctrycd
+          in: query
+          description: Country code
+          required: false
+          schema:
+            type: string
+        - name: spu
+          in: query
+          description: Service provider unit
+          required: false
+          schema:
+            type: string  
+        - name: sru
+          in: query
+          description: Service recipient unit
+          required: false
+          schema:
+            type: string    
+        - name: effDtFrom
+          in: query
+          description: Effective date from
+          required: false
+          schema:
+            type: string 
+        - name: effDtTo
+          in: query
+          description: Effective date to
+          required: false
+          schema:
+            type: string  
+        - name: filter
+          in: query
+          description: Expression defined filter logic such as gt,lt,==,!=, etc.,
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Expression defined search logic such as (paramName,searchTxt)
+          required: false
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sow'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Sow'
+        '404':
+          description: No Sows found
+    post:
+      tags:
+        - sow
+      summary: Create Sow
+      description: Create Sow
+      operationId: createSow
+      parameters:
+        - in: header
+          name: sow
+          description: The Sow to create
+          required: true
+          schema:
+            $ref: '#/components/schemas/Sow'
+      responses:
+        '200':
+          description: Sow created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sow'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Sow'
+        '405':
+          description: Invalid input
+    put:
+      tags:
+        - sow
+      summary: Update Sow
+      description: Update Sow
+      operationId: updateSow
+      parameters:
+        - in: header
+          name: sow
+          description: The Sow to update
+          required: true
+          schema:
+            $ref: '#/components/schemas/Sow'
+      responses:
+        '200':
+          description: Sow updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sow'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Sow'
+        '405':
+          description: Invalid input
+  /sows/{sowId}:
+    get:
+      tags:
+        - sow
+      summary: Find Sow by ID
+      description: Returns a single Sow
+      operationId: getSowById
+      parameters:
+        - name: sowId
+          in: path
+          description: ID of Sow to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sow'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Sow'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Sow not found
+    delete:
+      tags:
+        - sow
+      summary: Delete Sow by ID
+      description: delete Sow by ID
+      operationId: deleteSowById
+      parameters:
+        - name: sowId
+          in: path
+          description: Sow ID delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sow deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sow'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Sow'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Sow not found
+  /serviceitems:
+    get:
+      tags:
+        - serviceitem
+      summary: Get/Filter/Search all ServiceItems
+      description: Returns all ServiceItems
+      operationId: getAllSvcItems
+      parameters:
+        - name: svcItmName
+          in: query
+          description: ServiceItem contains name/title
+          required: false
+          schema:
+            type: string
+        - name: contact
+          in: query
+          description: ServiceItem contains contact email
+          required: false
+          schema:
+            type: string    
+        - name: filter
+          in: query
+          description: Expression defined filter logic such as gt,lt,==,!=, etc.,
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Expression defined search logic such as (paramName,searchTxt)
+          required: false
+          schema:
+            type: string     
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'
+        '404':
+          description: No ServiceItem found
+    post:
+      tags:
+        - serviceitem
+      summary: Create ServiceItem
+      description: Create ServiceItem
+      operationId: createSvcItem
+      parameters:
+        - in: header
+          name: svcItem
+          description: The ServiceItem to create
+          required: true
+          schema:
+            $ref: '#/components/schemas/ServiceItem'
+      responses:
+        '200':
+          description: ServiceItem created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'
+        '405':
+          description: Invalid input
+    put:
+      tags:
+        - serviceitem
+      summary: Update ServiceItem
+      description: Update ServiceItem
+      operationId: updateSvcItem
+      parameters:
+        - in: header
+          name: ServiceItem
+          description: The Service to update
+          required: true
+          schema:
+            $ref: '#/components/schemas/Sow'
+      responses:
+        '200':
+          description: ServiceItem updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'
+        '405':
+          description: Invalid input
+  /serviceitems/{svcItemId}:
+    get:
+      tags:
+        - serviceitem
+      summary: Find ServiceItem by ID
+      description: Returns ServiceItem
+      operationId: getSvcItemById
+      parameters:
+        - name: svcItemId
+          in: path
+          description: ID of ServiceItem to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ServiceItem not found
+    delete:
+      tags:
+        - serviceitem
+      summary: Delete ServiceItem by ID
+      description: delete ServiceItem by ID
+      operationId: deleteSvcItemById
+      parameters:
+        - name: svcItemId
+          in: path
+          description: ServiceItem ID to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ServiceItem deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: ServiceItem not found
+  /agreementparties:
+    get:
+      tags:
+        - party-to-agreement
+      summary: Get/Filter/Search all Party-to-Agreeement
+      description: Returns all Parties to Agreeement
+      operationId: getAllAgrParties
+      parameters:
+        - name: partyName
+          in: query
+          description: Party-to-Agreeement contains name
+          required: false
+          schema:
+            type: string
+        - name: contact
+          in: query
+          description: Party-to-Agreeement contains contact email
+          required: false
+          schema:
+            type: string    
+        - name: filter
+          in: query
+          description: Expression defined filter logic such as gt,lt,==,!=, etc.,
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Expression defined search logic such as (paramName,searchTxt)
+          required: false
+          schema:
+            type: string     
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyToAgreement'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PartyToAgreement'
+        '404':
+          description: No Party-to-Agreeement found
+    post:
+      tags:
+        - party-to-agreement
+      summary: Create Party-to-Agreeement
+      description: Create Party-to-Agreeement
+      operationId: createAgrParty
+      parameters:
+        - in: header
+          name: svcItem
+          description: The Party-to-Agreeement to create
+          required: true
+          schema:
+            $ref: '#/components/schemas/PartyToAgreement'
+      responses:
+        '200':
+          description: Party-to-Agreeement created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyToAgreement'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PartyToAgreement'
+        '405':
+          description: Invalid input
+    put:
+      tags:
+        - party-to-agreement
+      summary: Update Party-to-Agreeement
+      description: Update Party-to-Agreeement
+      operationId: updateAgrParty
+      parameters:
+        - in: header
+          name: PartyToAgreement
+          description: The PartyToAgreement to update
+          required: true
+          schema:
+            $ref: '#/components/schemas/PartyToAgreement'
+      responses:
+        '200':
+          description: PartyToAgreement updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyToAgreement'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PartyToAgreement'
+        '405':
+          description: Invalid input
+  /agreementparties/{agrPartyId}:
+    get:
+      tags:
+        - party-to-agreement
+      summary: Find PartyToAgreement by ID
+      description: Returns PartyToAgreement
+      operationId: getAgrPartyById
+      parameters:
+        - name: agrPartyId
+          in: path
+          description: ID of PartyToAgreement to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyToAgreement'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PartyToAgreement'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: PartyToAgreement not found
+    delete:
+      tags:
+        - party-to-agreement
+      summary: Delete PartyToAgreement by ID
+      description: delete PartyToAgreement by ID
+      operationId: deleteAgrPartyById
+      parameters:
+        - name: agrPartyId
+          in: path
+          description: PartyToAgreement ID to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: PartyToAgreement deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartyToAgreement'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PartyToAgreement'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: PartyToAgreement not found
+  /users:
+    get:
+      tags:
+        - user
+      summary: Get/Filter/Search all Users
+      description: Returns all Users
+      operationId: getAllUsers
+      parameters:
+        - name: ctrycd
+          in: query
+          description: Country code
+          required: false
+          schema:
+            type: string
+        - name: bu
+          in: query
+          description: Service provider unit
+          required: false
+          schema:
+            type: string  
+        - name: email
+          in: query
+          description: User email
+          required: false
+          schema:
+            type: string    
+        - name: filter
+          in: query
+          description: Expression defined filter logic such as gt,lt,==,!=, etc.,
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Expression defined search logic such as (paramName,searchTxt)
+          required: false
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: No Users found
+    post:
+      tags:
+        - user
+      summary: Create/Signup User
+      description: Create/Signup User
+      operationId: createUser
+      parameters:
+        - in: header
+          name: User
+          description: The User to create
+          required: true
+          schema:
+            $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '405':
+          description: Invalid input
+    put:
+      tags:
+        - user
+      summary: Update User
+      description: Update User
+      operationId: updateUser
+      parameters:
+        - in: header
+          name: User
+          description: The User to update
+          required: true
+          schema:
+            $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '405':
+          description: Invalid input
+  /users/{userId}:
+    get:
+      tags:
+        - user
+      summary: Find User by ID
+      description: Returns User
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          description: ID of User to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: User not found
+  /static-inputs:
+    get:
+      tags:
+        - static-input
+      summary: Get/Filter/Search all StaticInputs
+      description: Returns all StaticInputs
+      operationId: getAllStaticInputs
+      parameters:
+        - name: inputType
+          in: query
+          description: Static input type
+          required: false
+          schema:
+            type: string  
+        - name: filter
+          in: query
+          description: Expression defined filter logic such as gt,lt,==,!=, etc.,
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Expression defined search logic such as (paramName,searchTxt)
+          required: false
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticInputTmpl'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/StaticInputTmpl'
+        '404':
+          description: No StaticInputs found
+    post:
+      tags:
+        - static-input
+      summary: Create StaticInput
+      description: Create StaticInput
+      operationId: createStaticInput
+      parameters:
+        - in: header
+          name: StaticInput
+          description: The StaticInput to create
+          required: true
+          schema:
+            $ref: '#/components/schemas/StaticInputTmpl'
+      responses:
+        '200':
+          description: StaticInput created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticInputTmpl'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/StaticInputTmpl'
+        '405':
+          description: Invalid input
+    put:
+      tags:
+        - static-input
+      summary: Update StaticInput
+      description: Update StaticInput
+      operationId: updateStaticInput
+      parameters:
+        - in: header
+          name: StaticInput
+          description: The StaticInput to update
+          required: true
+          schema:
+            $ref: '#/components/schemas/StaticInputTmpl'
+      responses:
+        '200':
+          description: StaticInput updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticInputTmpl'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/StaticInputTmpl'
+        '405':
+          description: Invalid input
+    delete:
+      tags:
+        - static-input
+      summary: Delete StaticInput
+      description: delete StaticInput
+      operationId: deleteStaticInput
+      parameters:
+        - in: header
+          name: StaticInputTmpl
+          description: The StaticInputTmpl to delete
+          required: true
+          schema:
+            $ref: '#/components/schemas/StaticInputTmpl'
+      responses:
+        '200':
+          description: StaticInputT deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticInputTmpl'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/StaticInputTmpl'
+        '405':
+          description: Invalid input
+  /disa-digos:
+    get:
+      tags:
+        - disa-digos
+      summary: Get/Filter/Search all DisaDigos
+      description: Returns all DisaDigos
+      operationId: getAllDisaDigos
+      parameters:
+        - name: title
+          in: query
+          description: DisoDigos title
+          required: false
+          schema:
+            type: string  
+        - name: filter
+          in: query
+          description: Expression defined filter logic such as gt,lt,==,!=, etc.,
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Expression defined search logic such as (paramName,searchTxt)
+          required: false
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisaDigos'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DisaDigos'
+        '404':
+          description: No DisaDigos found
+    post:
+      tags:
+        - disa-digos
+      summary: Create DisaDigos
+      description: Create DisaDigos
+      operationId: createDisaDigos
+      parameters:
+        - in: header
+          name: DisaDigos
+          description: The DisaDigos to create
+          required: true
+          schema:
+            $ref: '#/components/schemas/DisaDigos'
+      responses:
+        '200':
+          description: DisaDigos created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisaDigos'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DisaDigos'
+        '405':
+          description: Invalid input
+    put:
+      tags:
+        - disa-digos
+      summary: Update DisaDigos
+      description: Update DisaDigos
+      operationId: updateDisaDigos
+      parameters:
+        - in: header
+          name: DisaDigos
+          description: The DisaDigos to update
+          required: true
+          schema:
+            $ref: '#/components/schemas/DisaDigos'
+      responses:
+        '200':
+          description: DisaDigos updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisaDigos'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DisaDigos'
+        '405':
+          description: Invalid input
+    delete:
+      tags:
+        - disa-digos
+      summary: Delete DisaDigos
+      description: delete DisaDigos
+      operationId: deleteDisaDigos
+      parameters:
+        - in: header
+          name: DisaDigos
+          description: The DisaDigos to delete
+          required: true
+          schema:
+            $ref: '#/components/schemas/DisaDigos'
+      responses:
+        '200':
+          description: DisaDigosT deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DisaDigos'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DisaDigos'
+        '405':
+          description: Invalid input
+  /data-sources:
+    get:
+      tags:
+        - data-ingestion
+      summary: Get/Filter/Search all DatasourceConfig
+      description: Returns all DatasourceConfig
+      operationId: getAllDatasourceConfig
+      parameters:
+        - name: title
+          in: query
+          description: DatasourceConfig title
+          required: false
+          schema:
+            type: string  
+        - name: filter
+          in: query
+          description: Expression defined filter logic such as gt,lt,==,!=, etc.,
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Expression defined search logic such as (paramName,searchTxt)
+          required: false
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasourceConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DatasourceConfig'
+        '404':
+          description: No DatasourceConfig found
+    post:
+      tags:
+        - data-ingestion
+      summary: Create DatasourceConfig
+      description: Create DatasourceConfig
+      operationId: createDatasourceConfig
+      parameters:
+        - in: header
+          name: DatasourceConfig
+          description: The DatasourceConfig to create
+          required: true
+          schema:
+            $ref: '#/components/schemas/DatasourceConfig'
+      responses:
+        '200':
+          description: DatasourceConfig created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasourceConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DatasourceConfig'
+        '405':
+          description: Invalid input
+    put:
+      tags:
+        - data-ingestion
+      summary: Update DatasourceConfig
+      description: Update DatasourceConfig
+      operationId: updateDatasourceConfig
+      parameters:
+        - in: header
+          name: DatasourceConfig
+          description: The DatasourceConfig to update
+          required: true
+          schema:
+            $ref: '#/components/schemas/DatasourceConfig'
+      responses:
+        '200':
+          description: DatasourceConfig updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasourceConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DatasourceConfig'
+        '405':
+          description: Invalid input
+    delete:
+      tags:
+        - data-ingestion
+      summary: Delete DatasourceConfig
+      description: delete DatasourceConfig
+      operationId: deleteDatasourceConfig
+      parameters:
+        - in: header
+          name: DatasourceConfig
+          description: The DatasourceConfig to delete
+          required: true
+          schema:
+            $ref: '#/components/schemas/DatasourceConfig'
+      responses:
+        '200':
+          description: DatasourceConfigT deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasourceConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DatasourceConfig'
+        '405':
+          description: Invalid input
+  /data-fetch-configs:
+    get:
+      tags:
+        - data-ingestion
+      summary: Get/Filter/Search all DataFetchScheduleConfig
+      description: Returns all DataFetchScheduleConfig
+      operationId: getAllDataFetchScheduleConfig
+      parameters:
+        - name: title
+          in: query
+          description: DataFetchScheduleConfig title
+          required: false
+          schema:
+            type: string  
+        - name: filter
+          in: query
+          description: Expression defined filter logic such as gt,lt,==,!=, etc.,
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Expression defined search logic such as (paramName,searchTxt)
+          required: false
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataFetchScheduleConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DataFetchScheduleConfig'
+        '404':
+          description: No DataFetchScheduleConfig found
+    post:
+      tags:
+        - data-ingestion
+      summary: Create DataFetchScheduleConfig
+      description: Create DataFetchScheduleConfig
+      operationId: createDataFetchScheduleConfig
+      parameters:
+        - in: header
+          name: DataFetchScheduleConfig
+          description: The DataFetchScheduleConfig to create
+          required: true
+          schema:
+            $ref: '#/components/schemas/DataFetchScheduleConfig'
+      responses:
+        '200':
+          description: DataFetchScheduleConfig created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataFetchScheduleConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DataFetchScheduleConfig'
+        '405':
+          description: Invalid input
+    put:
+      tags:
+        - data-ingestion
+      summary: Update DataFetchScheduleConfig
+      description: Update DataFetchScheduleConfig
+      operationId: updateDataFetchScheduleConfig
+      parameters:
+        - in: header
+          name: DataFetchScheduleConfig
+          description: The DataFetchScheduleConfig to update
+          required: true
+          schema:
+            $ref: '#/components/schemas/DataFetchScheduleConfig'
+      responses:
+        '200':
+          description: DataFetchScheduleConfig updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataFetchScheduleConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DataFetchScheduleConfig'
+        '405':
+          description: Invalid input
+    delete:
+      tags:
+        - data-ingestion
+      summary: Delete DataFetchScheduleConfig
+      description: delete DataFetchScheduleConfig
+      operationId: deleteDataFetchScheduleConfig
+      parameters:
+        - in: header
+          name: DataFetchScheduleConfig
+          description: The DataFetchScheduleConfig to delete
+          required: true
+          schema:
+            $ref: '#/components/schemas/DataFetchScheduleConfig'
+      responses:
+        '200':
+          description: DataFetchScheduleConfigT deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataFetchScheduleConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DataFetchScheduleConfig'
+        '405':
+          description: Invalid input
+  /data-fetch:
+    post:
+      tags:
+        - data-ingestion
+      summary: Trigger data fetch for DatasourceConfig
+      description: Trigger data fetch for DatasourceConfig
+      operationId: fetchAndIngestData
+      parameters:
+        - in: header
+          name: DatasourceConfig to 
+          description: The DatasourceConfig to be fetch and ingested
+          required: true
+          schema:
+            $ref: '#/components/schemas/DatasourceConfig'
+      responses:
+        '200':
+          description: Compute done
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasourceConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DatasourceConfig'
+        '405':
+          description: Invalid input
+  /upload-data:
+    post:
+      tags:
+        - data-ingestion
+      summary: Upload data
+      description: Upload data
+      operationId: uploadData
+      parameters:
+        - in: header
+          name: DataStore to 
+          description: The DataStore to be uploaded
+          required: true
+          schema:
+            $ref: '#/components/schemas/DataStore'
+      responses:
+        '200':
+          description: Compute done
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataStore'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/DataStore'
+        '405':
+          description: Invalid input        
+  /compute-schedule-configs:
+    get:
+      tags:
+        - compute
+      summary: Get/Filter/Search all ComputeScheduleConfig
+      description: Returns all ComputeScheduleConfig
+      operationId: getAllComputeScheduleConfig
+      parameters:
+        - name: title
+          in: query
+          description: ComputeScheduleConfig title
+          required: false
+          schema:
+            type: string  
+        - name: filter
+          in: query
+          description: Expression defined filter logic such as gt,lt,==,!=, etc.,
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          description: Expression defined search logic such as (paramName,searchTxt)
+          required: false
+          schema:
+            type: string      
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComputeScheduleConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ComputeScheduleConfig'
+        '404':
+          description: No ComputeScheduleConfig found
+    post:
+      tags:
+        - compute
+      summary: Create ComputeScheduleConfig
+      description: Create ComputeScheduleConfig
+      operationId: createComputeScheduleConfig
+      parameters:
+        - in: header
+          name: ComputeScheduleConfig
+          description: The ComputeScheduleConfig to create
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComputeScheduleConfig'
+      responses:
+        '200':
+          description: ComputeScheduleConfig created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComputeScheduleConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ComputeScheduleConfig'
+        '405':
+          description: Invalid input
+    put:
+      tags:
+        - compute
+      summary: Update ComputeScheduleConfig
+      description: Update ComputeScheduleConfig
+      operationId: updateComputeScheduleConfig
+      parameters:
+        - in: header
+          name: ComputeScheduleConfig
+          description: The ComputeScheduleConfig to update
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComputeScheduleConfig'
+      responses:
+        '200':
+          description: ComputeScheduleConfig updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComputeScheduleConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ComputeScheduleConfig'
+        '405':
+          description: Invalid input
+    delete:
+      tags:
+        - compute
+      summary: Delete ComputeScheduleConfig
+      description: delete ComputeScheduleConfig
+      operationId: deleteComputeScheduleConfig
+      parameters:
+        - in: header
+          name: ComputeScheduleConfig
+          description: The ComputeScheduleConfig to delete
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComputeScheduleConfig'
+      responses:
+        '200':
+          description: ComputeScheduleConfigT deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComputeScheduleConfig'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ComputeScheduleConfig'
+        '405':
+          description: Invalid input
+  /compute-engine:
+    post:
+      tags:
+        - compute
+      summary: Trigger compute engine for service item
+      description: Trigger compute engine for service item
+      operationId: computeForSvcItem
+      parameters:
+        - in: header
+          name: ServiceItem to 
+          description: The ServiceItem to be computed
+          required: true
+          schema:
+            $ref: '#/components/schemas/ServiceItem'
+      responses:
+        '200':
+          description: Compute done
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ServiceItem'
+        '405':
+          description: Invalid input
+components:
+  schemas:
+    ServiceItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          example: ABSP/IDEAL/ICALL/WBSP
+        description:
+          type: string
+          example: 
+        standards:
+          type: string
+          example: 
+        priceConfig:
+          type: object
+          $ref: '#/components/schemas/MethodologyTerm'
+        quantityConfig:
+          type: object
+          $ref: '#/components/schemas/MethodologyTerm'
+        markup:
+          type: object
+          $ref: '#/components/schemas/Markup'
+        contact:
+          type: object
+          $ref: '#/components/schemas/Contact'
+      xml:
+        name: order
+    PartyToAgreement:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        digiSign:
+          type: string
+        contact:
+          type: object
+          $ref: '#/components/schemas/Contact'
+      xml:
+        name: agrParty
+    Contact:
+      type: object
+      properties:
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+      xml:
+        name: contact
+    ComputeScheduleConfig:
+      type: object
+      properties:
+        svcItem:
+          type: object
+          $ref: '#/components/schemas/ServiceItem'
+        scheduleExpr:
+          type: string
+      xml:
+        name: address
+    DisaDigos:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/StaticInputTmpl'
+      xml:
+        name: disaDigos
+    DataFetchScheduleConfig:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        datasource:
+          type: object
+          $ref: '#/components/schemas/DatasourceConfig'
+        scheduleExpr:
+          type: string
+      xml:
+        name: address
+    DataStore:
+      type: object
+      properties:
+        bizDate:
+          type: string
+          format: date
+        category:
+          type: string
+        fields:
+          type: array
+          items:
+            type: string
+        records:
+          type: array
+          items:
+            type: array
+            items: 
+              type: string
+              example: csv string
+      xml:
+        name: address
+    MethodologyTerm:
+      type: object
+      properties:
+        termType:
+          type: string
+        title:
+          type: string
+        scopeRules:
+          type: object
+          example: Map<fieldName,conditionExpr>
+        measures:
+          type: object
+          example: Map<fieldName,conditionExpr>
+      xml:
+        name: category
+    Extraction:
+      type: object
+      properties:
+        sql:
+          type: string
+        params:
+          type: array
+          items: 
+            type: string
+      xml:
+        name: extraction
+    Markup:
+      type: object
+      properties:
+        markupPercent:
+          type: number
+      xml:
+        name: markup
+    DatasourceConfig:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        connection:
+          type: object
+          $ref: '#/components/schemas/Connection'
+      xml:
+        name: dataSourceConfig
+    ServiceConsumerMap:
+      type: object
+      properties:
+        svcItem:
+          type: object
+          $ref: '#/components/schemas/ServiceItem'
+        svcRecipient:
+          type: object
+          $ref: '#/components/schemas/PartyToAgreement'
+      xml:
+        name: svcConsumerMap
+    StaticInputTmpl:
+      type: object
+      properties:
+        docType:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+      xml:
+        name: staticInputTmpl
+    Connection:
+      type: object
+      properties:
+        driverClass:
+          type: string
+        url:
+          type: string
+        user:
+          type: string
+        passwordEncrypted:
+          type: string
+        prop1:
+          type: string
+        prop2:
+          type: string  
+      xml:
+        name: tag
+    Sow:
+      type: object
+      properties:
+        id:
+          type: string
+        countryCd:
+          type: string
+        spu:
+          type: object
+          $ref: '#/components/schemas/PartyToAgreement'
+        sru:
+          type: object
+          $ref: '#/components/schemas/PartyToAgreement'  
+        effectDateFrom:
+          type: string
+          format: date
+        effectDateTo:
+          type: string
+          format: date
+        svcItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceItem'  
+      xml:
+        name: sow
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        bu:
+          type: object
+          $ref: '#/components/schemas/PartyToAgreement'
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        phone:
+          type: string
+          example: '12345'
+        userStatus:
+          type: integer
+          description: User Status
+          format: int32
+          example: 1
+      xml:
+        name: user
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Sow:
+      description: Sow object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Sow'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Sow'
+    UserArray:
+      description: List of user object
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Contact'
+  
+   
